@@ -1,0 +1,125 @@
+FunFOLDQ: Identification and characterization of protein ligand binding sites using bioinformatic and computational tools
+----------------------------------------------------------------------------------------
+
+Version 3.01 (April 2015)
+
+(c) Liam J. McGuffin and Daniel B. Roche
+
+Description
+-----------
+
+A method for predicting the ligand binding site residues, EC codes and GO terms in a protein using a 3D model and a list of templates.
+
+References
+----------
+
+Roche, D. B., Tetchner, S. J. & McGuffin, L. J. (2011) FunFOLD: an improved automated method for the prediction of ligand binding residues using 3D models of proteins. BMC Bioinformatics, 12 , 160
+
+Roche, D. B., Buenavista, M.T. & McGuffin, L. J. (2012) FunFOLDQA: A Quality Assessment Tool for Protein-Ligand Binding Site Residue Predictions. PLoS ONE 7(5): e38219.
+
+Roche, D. B., Buenavista, M. T., McGuffin, L. J. (2013) The FunFOLD2 server for the prediction of protein-ligand interactions. Nucleic Acids Res., 41, W303-7.
+
+Roche, D. B. & McGuffin, L. J. (2016) In silico Identification and characterization of protein-ligand binding sites. In: Computational Design of Ligand Binding Proteins, Methods Mol Biol., 1414, DOI:10.1007/978-1-4939-3569-7
+
+
+Installation
+------------
+
+No installation is required for the FunFOLDQ program itself after you have downloaded the file. The program is provided in the form of an executable jar file (FunFOLDQA.jar). The instructions below are for Linux (bash) but equivalent commands can be used in other Unix based OSes.
+
+Requirements:
+
+1. A recent version of Java (java.com/getjava/).
+2. A recent version of PyMOL (www.pymol.org).
+3. The TMalign program (http://zhanglab.ccmb.med.umich.edu/TM-align/). Please ensure the TMalign program is working on your system before attempting to run FunFOLDQA. Ensure that you have the correct 32bit/64bit version for your hardware and that the TMalign file is made executable:
+chmod +x TMalign
+4. wget and ImageMagick installed system wide.
+5. The CIF chemical components database file should be downloaded from here - ftp://ftp.wwpdb.org/pub/pdb/data/monomers/components.cif
+
+6. The BioLip databases for ligands and receptors (up to 30 GB or disc space may be required). 
+The databases need to be downloaded in 2 sections firstly all annotations prior to 6/3/2013 can be downloaded from here for the receptor database: http://zhanglab.ccmb.med.umich.edu/BioLiP/download/receptor_2013-03-6.tar.bz2 (3.6 G) and from here for the ligand database: http://zhanglab.ccmb.med.umich.edu/BioLiP/download/ligand_2013-03-6.tar.bz2 (438 M). 
+
+The Text File of the BioLip annotations can be downloaded from here: http://zhanglab.ccmb.med.umich.edu/BioLiP/download/BioLiP.tar.bz2
+
+To updata the databases to include annotations after 2013-03-6 it is recommended to download and use this perl script to update the database:  http://zhanglab.ccmb.med.umich.edu/BioLiP/download/download_all_sets.pl 
+
+The BioLip text file: http://zhanglab.ccmb.med.umich.edu/BioLiP/download/BioLiP.tar.bz2 and all the weekly update text files should be concatonated to form a large text file containing all of the annotations.
+
+
+NB - It is recommended to regularly update your BioLip and CIF databases !
+
+Additionally, a shell script and perl script is available from the downloads page: downloadBioLip_CIF.tar.gz, that can be used to download the BioLip and CIF libraries, by simply editing the paths of the BioLip library and the path of the directory where the script is executed.
+
+
+Running the program
+-------------------
+
+You can simply edit the shell script (FunFOLDQ.sh) or you can follow the steps below.
+
+1. (optional) Set the bash environment variable for Java, if you have not installed it system wide, TMalign, PyMOL and the location of the databases and database files e.g.
+
+export LC_ALL=en_US.utf-8
+export PYMOL_HOME=/usr/bin/
+export TMALIGN_HOME=/home/roche/bin/
+export JAVA_HOME=/usr/bin/
+export BIOLIP_Directory=/home/roche/bin/BioLip/FunFOLDBioLip/
+export BIOLIP_LIGAND=/home/roche/bin/BioLip/FunFOLDBioLip/ligand/
+export BIOLIP_RECEPTOR=/home/roche/bin/BioLip/FunFOLDBioLip/receptor/
+export BIOLIP_TXT=/home/roche/bin/BioLip/FunFOLDBioLip/BioLiP.txt
+export CIF=/home/roche/bin/BioLip/FunFOLDBioLip/components.cif
+
+$BIOLIP_Directory = BioLip Directory location 
+$BIOLIP_TXT = BioLip directory textfile
+$BIOLIP_LIGAND = BioLip ligand directory 
+$BIOLIP_RECEPTOR = BioLip receptor directory 
+$CIF = CIF file including the full directory path 
+
+
+2. Run the FunFOLDQ examples. For example, using the input files and output directories that are provided in T0470_Input.tar.gz with your own directory configuration (use full paths), example of the output results are provided in FunFOLDQA_example_output.tar.gz. 
+If the path of your model was /home/roche/bin/FunFOLDQ/MUProt_TS3, your list of templates was /home/roche/bin/FunFOLDQ/T0470_PARENTNew.dat (all templates should be listen on a single line seperated by a space), your fasta sequence file was /home/roche/bin/FunFOLDQ/T0470.fasta, your output directory was /home/roche/bin/FunFOLDQ/ and your target was called T0470:
+
+
+$JAVA_HOME/bin/java -jar FunFOLDQ.jar /home/roche/bin/FunFOLDQ/MUProt_TS3 T0470 /home/roche/bin/FunFOLDQ/ /home/roche/bin/FunFOLDQ/T0470_PARENTNew.dat /home/roche/bin/FunFOLDQ/T0470.fasta $BIOLIP_TXT $BIOLIP_LIGAND $BIOLIP_RECEPTOR $CIF
+
+Or, if you have java installed system wide:
+
+java -jar FunFOLDQ.jar /home/roche/bin/FunFOLDQ/MUProt_TS3 T0470 /home/roche/bin/FunFOLDQ/ /home/roche/bin/FunFOLDQ/T0470_PARENTNew.dat /home/roche/bin/FunFOLDQ/T0470.fasta $BIOLIP_TXT $BIOLIP_LIGAND $BIOLIP_RECEPTOR $CIF
+
+Or, using the shell script provided:
+
+./FunFOLDQ.sh /home/roche/bin/FunFOLDQ/MUProt_TS3 T0470 /home/roche/bin/FunFOLDQ/ /home/roche/bin/FunFOLDQ/T0470_PARENTNew.dat /home/roche/bin/FunFOLDQ/T0470.fasta 
+
+
+IMPORTANT: Please also note that you should use FULL PATHS for your input files and output directory, the output directory should also end with a "/" and must contain the input model.
+
+
+Output
+------
+
+An example of output for target T0470 can be found in the file T0470_Results.tar.gz. The important example files containing information about the prediction are:
+
+T0470_FN.txt - the final prediction in CASP FN format - containing list of predicted binding site residues, ligands, associated EC and GO terms
+T0470_FN2_CAMEO-LB.txt - CAMEO-LB formatted results - containing the propensite that each ligand type is in contact with predicted binding site residue 
+T0470_lig.pdb - PDB file containing a superposition of all ligands and templates with the model
+T0470_lig2.pdb - PDB file of the model with all possible ligands
+T0470_lig3.pdb - PDB file of the model with the predicted centroid ligand
+T0470_binding_site.png - an auto generated image of the binding site
+pymol.script - pymol script used to generate the image
+
+
+1cb8A_just_ligands.pdb - PDB file just containing the biologically relevant ligands 
+1cb8A_lig.pdb - PDF file containing the template and its associated biologically relevant ligands 
+1cb8A_lig_sup.pdb - PDF file containing the template superposed onto the model
+
+
+
+Trouble Shooting
+----------------
+
+Email me: l.j.mcguffin@reading.ac.uk
+
+I will try to respond to your issue as soon as I can!
+
+Thanks,
+Liam
+
